@@ -1,8 +1,9 @@
 import "@/styles/globals.css";
 import Providers from "@/components/Provider";
-
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { CustomSidebar } from "@/components/Sidebar";
+import { auth } from "@/server/auth";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -10,13 +11,23 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
+  const user = session?.user;
+
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={GeistSans.variable}>
       <Providers>
-        <body>{children}</body>
+        <body className="bg-[#0c0c0c]">
+          <div className="flex min-h-screen">
+            {user && <CustomSidebar user={user} />}
+            <main className="flex-1 md:ml-64">
+              <div className="min-h-screen w-full">{children}</div>
+            </main>
+          </div>
+        </body>
       </Providers>
     </html>
   );
