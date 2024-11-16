@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/server/auth";
 import ProfileView from "./ProfileView";
 import ProfileEdit from "./ProfileEdit";
+import { CustomSidebar } from "@/components/Sidebar";
 
 type PageProps = {
   params: { username: string };
@@ -19,7 +20,7 @@ async function getProfile(username: string) {
   return res.json();
 }
 export default async function ProfilePage({ params }: any) {
-  const { username } = params;
+  const { username } = await params;
   const profile = await getProfile(username);
 
   if (!profile) {
@@ -27,6 +28,8 @@ export default async function ProfilePage({ params }: any) {
   }
 
   const session = await auth();
+  const user = session?.user;
+
   const isOwner = session?.user?.id === profile.id;
 
   if (isOwner) {

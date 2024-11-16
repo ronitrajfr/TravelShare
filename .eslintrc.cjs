@@ -48,6 +48,7 @@ const config = {
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/only-throw-error": "off",
   },
 };
 
