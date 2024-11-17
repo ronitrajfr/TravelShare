@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
-import "@uploadthing/react/styles.css";
+//import "@uploadthing/react/styles.css";
 import { type Metadata } from "next";
 import { auth } from "@/server/auth";
 import RootLayoutClient from "@/components/RootLayoutClient";
 import Providers from "@/components/Provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "TravelShare",
@@ -25,6 +26,7 @@ export default async function RootLayout({
       <Providers>
         <body className="bg-[#0c0c0c]">
           <RootLayoutClient user={user}>{children}</RootLayoutClient>
+          <Toaster />
         </body>
       </Providers>
     </html>

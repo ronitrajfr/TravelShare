@@ -11,7 +11,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { icon: Home, href: "/", label: "Home" },
+  { icon: Home, href: "/home", label: "Home" },
   { icon: Search, href: "/search", label: "Search" },
   { icon: Compass, href: "/explore", label: "Explore" },
 ];
@@ -71,10 +71,13 @@ export function CustomSidebar({ user }: { user: any }) {
               </Link>
             ))}
           </nav>
-          <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-black transition-colors hover:bg-gray-200">
+          <Link
+            href={"/new-post"}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-black transition-colors hover:bg-gray-200"
+          >
             <PlusCircle className="h-5 w-5" />
             <span>New Post</span>
-          </button>
+          </Link>
         </div>
         <div className="mt-auto">
           <Link

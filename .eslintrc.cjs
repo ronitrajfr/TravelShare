@@ -49,6 +49,7 @@ const config = {
     "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/only-throw-error": "off",
+    "typescript-eslint/no-floating-promises": "off",
   },
 };
 
