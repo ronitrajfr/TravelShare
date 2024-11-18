@@ -235,19 +235,18 @@ export function PostCard({ post, currentUser }: any) {
               />
             </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
             onClick={async () => {
-              await navigator.share({
-                title: post.name,
-                text: `Check out ${post.name} on TravelShare`,
-                url: `${window.location.origin}/posts/${post.id}`,
+              await navigator.clipboard.writeText(
+                `${window.location.origin}/posts/${post.id}`,
+              );
+              toast({
+                title: "Link copied to clipboard",
               });
             }}
           >
-            <Share className="h-4 w-4" />
-          </Button>
+            <Share className="h-4 w-4" color="white" />
+          </button>
         </div>
         <div className="text-white">
           <h3 className="font-semibold">{post.name}</h3>
