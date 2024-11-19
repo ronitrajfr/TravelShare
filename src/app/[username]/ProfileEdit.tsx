@@ -10,6 +10,7 @@ import {
   Twitter,
   Instagram,
   Music,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,17 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { PostCard } from "@/components/PostCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function ProfileEdit({ profile }: { profile: any }) {
   const [name, setName] = useState(profile.name);
@@ -33,8 +45,10 @@ export default function ProfileEdit({ profile }: { profile: any }) {
   const [spotify, setSpotify] = useState(profile.spotify || "");
   const [instagram, setInstagram] = useState(profile.instagram || "");
   const [twitter, setTwitter] = useState(profile.twitter || "");
+  const [posts, setPosts] = useState(profile.posts || []);
   const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,14 +81,56 @@ export default function ProfileEdit({ profile }: { profile: any }) {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to update profile");
+        const data = await res.json();
+        throw new Error(data.error || "Failed to update profile");
       }
+
+      toast({
+        title: "Success",
+        description: "Your profile has been updated successfully.",
+      });
 
       router.refresh();
     } catch (error) {
       console.error("Error updating profile:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update profile. Please try again.",
+      });
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDeletePost = async (postId: number) => {
+    try {
+      const res = await fetch(
+        `/api/users/${profile.username}/posts?postId=${postId}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (res.ok) {
+        setPosts(posts.filter((post: any) => post.id !== postId));
+        toast({
+          title: "Success",
+          description: "Post deleted successfully",
+        });
+      } else {
+        throw new Error("Failed to delete post");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete post. Please try again.",
+      });
     }
   };
 
@@ -104,8 +160,8 @@ export default function ProfileEdit({ profile }: { profile: any }) {
               <TabsTrigger value="social" className="text-white">
                 Social
               </TabsTrigger>
-              <TabsTrigger value="activity" className="text-white">
-                Activity
+              <TabsTrigger value="posts" className="text-white">
+                Posts
               </TabsTrigger>
             </TabsList>
             <TabsContent value="general" className="space-y-6 pt-6">
@@ -220,7 +276,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="https://twitter.com/yourusername"
+                    placeholder="Your Twitter username"
                   />
                 </div>
                 <div className="space-y-2">
@@ -233,7 +289,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="https://instagram.com/yourusername"
+                    placeholder="Your Instagram username"
                   />
                 </div>
                 <div className="space-y-2">
@@ -246,20 +302,61 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={spotify}
                     onChange={(e) => setSpotify(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="https://open.spotify.com/user/yourusername"
+                    placeholder="Your Spotify username"
                   />
                 </div>
               </div>
             </TabsContent>
-            <TabsContent value="activity">
-              <div className="py-8 text-center">
-                <h3 className="text-lg font-medium text-white">
-                  Your Travel Activity
-                </h3>
-                <p className="mt-2 text-gray-400">
-                  Track your contributions and interactions with other travelers
+            <TabsContent value="posts" className="space-y-6 pt-6">
+              <h2 className="mb-4 text-2xl font-semibold text-white">
+                Your Posts
+              </h2>
+              {posts.length > 0 ? (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {posts.map((post: any) => (
+                    <div key={post.id} className="relative">
+                      <PostCard post={post} currentUser={profile} />
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="absolute right-2 top-2"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>
+                              Are you sure you want to delete this post?
+                            </DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your post.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button variant="outline" onClick={() => {}}>
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={() => handleDeletePost(post.id)}
+                            >
+                              Delete
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-400">
+                  You haven't created any posts yet.
                 </p>
-              </div>
+              )}
             </TabsContent>
           </Tabs>
           <div className="flex justify-end pt-6">

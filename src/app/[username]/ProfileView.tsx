@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Mail, Twitter, Instagram, Music } from "lucide-react";
 import Link from "next/link";
+import { PostCard } from "@/components/PostCard";
 
 export default function ProfileView({ profile }: { profile: any }) {
   return (
@@ -50,7 +51,7 @@ export default function ProfileView({ profile }: { profile: any }) {
                 )}
                 {profile.twitter && (
                   <Link
-                    href={profile.twitter}
+                    href={`https://twitter.com/${profile.twitter}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white"
@@ -60,7 +61,7 @@ export default function ProfileView({ profile }: { profile: any }) {
                 )}
                 {profile.instagram && (
                   <Link
-                    href={profile.instagram}
+                    href={`https://instagram.com/${profile.instagram}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white"
@@ -70,7 +71,7 @@ export default function ProfileView({ profile }: { profile: any }) {
                 )}
                 {profile.spotify && (
                   <Link
-                    href={profile.spotify}
+                    href={`https://open.spotify.com/user/${profile.spotify}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-400 hover:text-white"
@@ -79,6 +80,18 @@ export default function ProfileView({ profile }: { profile: any }) {
                   </Link>
                 )}
               </div>
+            </div>
+            <div>
+              <h3 className="mb-4 text-lg font-medium text-white">Posts</h3>
+              {profile.posts && profile.posts.length > 0 ? (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {profile.posts.map((post: any) => (
+                    <PostCard key={post.id} post={post} currentUser={null} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-400">No posts yet.</p>
+              )}
             </div>
           </div>
         </CardContent>

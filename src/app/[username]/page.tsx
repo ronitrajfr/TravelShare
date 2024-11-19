@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/server/auth";
 import ProfileView from "./ProfileView";
 import ProfileEdit from "./ProfileEdit";
-import { CustomSidebar } from "@/components/Sidebar";
+import { db } from "@/server/db";
 
 type PageProps = {
   params: { username: string };
@@ -10,17 +10,46 @@ type PageProps = {
 };
 
 async function getProfile(username: string) {
-  const res = await fetch(
-    `http://localhost:3000/api/profile?username=${username}`,
-    { cache: "no-store" },
-  );
-  if (!res.ok) {
+  const profile = await db.user.findUnique({
+    where: { username },
+    include: {
+      posts: {
+        include: {
+          votes: true,
+          createdBy: {
+            select: {
+              name: true,
+              username: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  if (!profile) {
     return null;
   }
-  return res.json();
+
+  return {
+    ...profile,
+    posts: profile.posts.map((post) => ({
+      ...post,
+      createdBy: {
+        name: profile.name,
+        username: profile.username,
+        image: profile.image,
+      },
+    })),
+  };
 }
-export default async function ProfilePage({ params }: any) {
-  const { username } = await params;
+
+export default async function ProfilePage({ params }: PageProps) {
+  const { username } = params;
   const profile = await getProfile(username);
 
   if (!profile) {
@@ -30,7 +59,7 @@ export default async function ProfilePage({ params }: any) {
   const session = await auth();
   const user = session?.user;
 
-  const isOwner = session?.user?.id === profile.id;
+  const isOwner = user?.username === profile.username;
 
   if (isOwner) {
     return <ProfileEdit profile={profile} />;
