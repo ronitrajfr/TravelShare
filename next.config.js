@@ -1,10 +1,8 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-import "./src/env.js";
-
 /** @type {import("next").NextConfig} */
-const config = {};
+const nextConfig = {
+  images: {
+    domains: ["images.unsplash.com"], // Replace with your image domains
+  },
+};
 
-export default config;
+export default nextConfig;

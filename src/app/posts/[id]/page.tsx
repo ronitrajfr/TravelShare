@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { PostCard } from "@/components/PostCard";
-import { auth } from "@/server/auth";
+import { Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function SinglePostView() {
   const [post, setPost] = useState(null);
@@ -32,16 +33,28 @@ export default function SinglePostView() {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   if (!post) {
-    return <div>Post not found</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-xl font-semibold">Post not found</p>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <PostCard post={post} currentUser={null} />
+    <div className="container mx-auto max-w-2xl px-4 py-8 max-md:py-24">
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <PostCard post={post} currentUser={null} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
