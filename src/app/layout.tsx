@@ -9,8 +9,20 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "TravelShare",
-  description: "Share your travel experiences",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  description:
+    "Discover and share hidden gems with breathtaking photos and precise locations, powered by the community. ",
+  openGraph: {
+    images: ["/og.webp"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TravelShare",
+    description:
+      "Discover and share hidden gems with breathtaking photos and precise locations, powered by the community. ",
+    images: ["/og.webp"],
+    creator: "@ronitrajfr",
+  },
+  icons: [{ rel: "icon", url: "/logo.svg" }],
 };
 
 export default async function RootLayout({

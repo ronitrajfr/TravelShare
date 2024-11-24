@@ -50,6 +50,8 @@ const config = {
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/only-throw-error": "off",
     "typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "react/no-unescaped-entities": "off",
   },
 };
 

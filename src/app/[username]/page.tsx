@@ -4,11 +4,6 @@ import ProfileView from "./ProfileView";
 import ProfileEdit from "./ProfileEdit";
 import { db } from "@/server/db";
 
-type PageProps = {
-  params: { username: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 async function getProfile(username: string) {
   const profile = await db.user.findUnique({
     where: { username },
@@ -48,8 +43,8 @@ async function getProfile(username: string) {
   };
 }
 
-export default async function ProfilePage({ params }: PageProps) {
-  const { username } = params;
+export default async function ProfilePage({ params }: any) {
+  const { username } = await params;
   const profile = await getProfile(username);
 
   if (!profile) {

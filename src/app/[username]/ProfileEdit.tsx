@@ -354,7 +354,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                 </div>
               ) : (
                 <p className="text-gray-400">
-                  You haven't created any posts yet.
+                  You haven&apos;t created any posts yet.
                 </p>
               )}
             </TabsContent>

@@ -5,8 +5,27 @@ import { useSearchParams } from "next/navigation";
 import { PostCard } from "@/components/PostCard";
 import { Search } from "@/components/Search";
 
+type Post = {
+  id: string;
+  imageUrls: string[];
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  createdAt: string;
+  createdBy: {
+    name: string;
+    username: string;
+    image: string;
+  };
+  votes: {
+    id: string;
+    type: "upvote" | "downvote";
+  }[];
+};
+
 export default function SearchPage() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
@@ -32,13 +51,16 @@ export default function SearchPage() {
     };
 
     if (query) {
-      fetchSearchResults();
+      void fetchSearchResults();
+    } else {
+      setPosts([]);
+      setLoading(false);
     }
   }, [query]);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">Search Results</h1>
+      <h1 className="mb-6 text-3xl font-bold text-white">Search Results</h1>
       <div className="mb-8">
         <Search />
       </div>
@@ -46,7 +68,7 @@ export default function SearchPage() {
         <p>Loading...</p>
       ) : posts.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post: any) => (
+          {posts.map((post) => (
             <PostCard key={post.id} post={post} currentUser={null} />
           ))}
         </div>

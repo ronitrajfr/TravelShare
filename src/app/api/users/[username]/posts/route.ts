@@ -2,11 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/server/db";
 import { auth } from "@/server/auth";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { username: string } },
-) {
-  const { username } = params;
+export async function GET(request: NextRequest, { params }: any) {
+  const { username } = await params;
 
   try {
     const posts = await db.post.findMany({
@@ -40,10 +37,7 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { username: string } },
-) {
+export async function DELETE(request: NextRequest, { params }: any) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

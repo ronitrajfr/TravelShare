@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -104,13 +105,13 @@ export default function LoginPage() {
 
             <p className="text-center text-sm text-zinc-500">
               By continuing, you agree to our{" "}
-              <a href="/terms" className="underline hover:text-white">
+              <Link href="/terms" className="underline hover:text-white">
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="/privacy" className="underline hover:text-white">
+              <Link href="/privacy" className="underline hover:text-white">
                 Privacy Policy
-              </a>
+              </Link>
             </p>
           </div>
         </Card>

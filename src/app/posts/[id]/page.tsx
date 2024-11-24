@@ -6,10 +6,30 @@ import { PostCard } from "@/components/PostCard";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
+type Post = {
+  id: string;
+  imageUrls: string[];
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  createdAt: string;
+  createdBy: {
+    name: string;
+    username: string;
+    image: string;
+  };
+  votes: {
+    id: string;
+    type: "upvote" | "downvote";
+  }[];
+};
+
 export default function SinglePostView() {
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const { id } = useParams();
+  const params = useParams();
+  const id = typeof params.id === "string" ? params.id : (params.id?.[0] ?? "");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -29,7 +49,7 @@ export default function SinglePostView() {
       }
     };
 
-    fetchPost();
+    void fetchPost();
   }, [id]);
 
   if (loading) {
