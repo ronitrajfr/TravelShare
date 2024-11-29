@@ -6,11 +6,9 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const username = url.searchParams.get("username");
 
-  if (!username) {
-    return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 },
-    );
+  // Validate username against path traversal
+  if (!username || username.includes("..") || username.startsWith("/")) {
+    return NextResponse.json({ error: "Invalid username" }, { status: 400 });
   }
 
   const user = await db.user.findUnique({
@@ -44,11 +42,9 @@ export async function PATCH(request: Request) {
   const url = new URL(request.url);
   const username = url.searchParams.get("username");
 
-  if (!username) {
-    return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 },
-    );
+  // Validate username against path traversal
+  if (!username || username.includes("..") || username.startsWith("/")) {
+    return NextResponse.json({ error: "Invalid username" }, { status: 400 });
   }
 
   const data = await request.json();
@@ -62,8 +58,17 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Check if new username is already taken
-  if (newUsername && newUsername !== username) {
+  // Additional validation for new username
+  if (newUsername) {
+    // Check if new username contains invalid characters
+    if (newUsername.includes("..") || newUsername.startsWith("/")) {
+      return NextResponse.json(
+        { error: "Invalid new username" },
+        { status: 400 },
+      );
+    }
+
+    // Check if new username is already taken
     const existingUser = await db.user.findUnique({
       where: { username: newUsername },
     });

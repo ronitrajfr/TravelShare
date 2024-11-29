@@ -90,7 +90,8 @@ export default function ProfileEdit({ profile }: { profile: any }) {
         description: "Your profile has been updated successfully.",
       });
 
-      router.refresh();
+      // Redirect to the new username profile page
+      router.push(`/u/${username}`);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
@@ -276,7 +277,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="Your Twitter username"
+                    placeholder="https://x.com/ronitajfr"
                   />
                 </div>
                 <div className="space-y-2">
@@ -289,7 +290,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="Your Instagram username"
+                    placeholder="https://instagram.com/ronitajfr"
                   />
                 </div>
                 <div className="space-y-2">
@@ -302,7 +303,7 @@ export default function ProfileEdit({ profile }: { profile: any }) {
                     value={spotify}
                     onChange={(e) => setSpotify(e.target.value)}
                     className="border-[#3c3c3c] bg-[#2c2c2c] text-white"
-                    placeholder="Your Spotify username"
+                    placeholder="Your Spotify username url"
                   />
                 </div>
               </div>
