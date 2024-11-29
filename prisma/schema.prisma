@@ -17,7 +17,7 @@ model Post {
     name        String
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
-    createdBy   User      @relation("UserPosts", fields: [createdById], references: [username])
+    createdBy   User      @relation("UserPosts", fields: [createdById], references: [id])
     createdById String
     votes       Vote[]    
     reports     Report[]
@@ -30,7 +30,7 @@ model Vote {
     type      String   // "upvote" or "downvote"
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    Int
-    user      User     @relation("UserVotes", fields: [userId], references: [username])
+    user      User     @relation("UserVotes", fields: [userId], references: [id])
     userId    String
     createdAt DateTime @default(now())
 
@@ -42,7 +42,7 @@ model Report {
     reason    String
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    Int
-    user      User     @relation("UserReports", fields: [userId], references: [username])
+    user      User     @relation("UserReports", fields: [userId], references: [id])
     userId    String
     createdAt DateTime @default(now())
 
