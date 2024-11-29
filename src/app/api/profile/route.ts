@@ -2,12 +2,20 @@ import { NextResponse } from "next/server";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 
+const INVALID_USERNAME_CHARS = /[~`"';]/;
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const username = url.searchParams.get("username");
 
-  // Validate username against path traversal
-  if (!username || username.includes("..") || username.startsWith("/")) {
+  // Validate username
+  if (
+    !username ||
+    username.includes("..") ||
+    username.startsWith("/") ||
+    INVALID_USERNAME_CHARS.test(username) ||
+    username.includes(" ")
+  ) {
     return NextResponse.json({ error: "Invalid username" }, { status: 400 });
   }
 
@@ -42,8 +50,14 @@ export async function PATCH(request: Request) {
   const url = new URL(request.url);
   const username = url.searchParams.get("username");
 
-  // Validate username against path traversal
-  if (!username || username.includes("..") || username.startsWith("/")) {
+  // Validate current username
+  if (
+    !username ||
+    username.includes("..") ||
+    username.startsWith("/") ||
+    INVALID_USERNAME_CHARS.test(username) ||
+    username.includes(" ")
+  ) {
     return NextResponse.json({ error: "Invalid username" }, { status: 400 });
   }
 
@@ -60,24 +74,31 @@ export async function PATCH(request: Request) {
 
   // Additional validation for new username
   if (newUsername) {
-    // Check if new username contains invalid characters
-    if (newUsername.includes("..") || newUsername.startsWith("/")) {
+    // Check if new username contains invalid characters or patterns
+    if (
+      INVALID_USERNAME_CHARS.test(newUsername) ||
+      newUsername.includes(" ") ||
+      newUsername.includes("..") ||
+      newUsername.startsWith("/")
+    ) {
       return NextResponse.json(
         { error: "Invalid new username" },
         { status: 400 },
       );
     }
 
-    // Check if new username is already taken
-    const existingUser = await db.user.findUnique({
-      where: { username: newUsername },
-    });
+    if (newUsername !== currentUser.username) {
+      // Check if new username is already taken
+      const existingUser = await db.user.findUnique({
+        where: { username: newUsername },
+      });
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Username already taken" },
-        { status: 400 },
-      );
+      if (existingUser) {
+        return NextResponse.json(
+          { error: "Username already taken" },
+          { status: 400 },
+        );
+      }
     }
   }
 
