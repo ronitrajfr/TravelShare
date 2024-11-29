@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const post = await db.post.create({
       data: {
         ...data,
-        createdById: session?.user?.username,
+        createdById: session?.user?.id,
       },
     });
 

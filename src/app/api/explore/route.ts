@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         createdBy: {
           select: {
             name: true,
-            username: true,
+            id: true,
             image: true,
           },
         },
