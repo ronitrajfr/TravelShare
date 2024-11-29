@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Search, Compass, PlusCircle, User } from "lucide-react";
+import Image from "next/image";
 
 type NavItem = {
   icon: React.ElementType;
@@ -22,7 +23,7 @@ export function CustomSidebar({ user }: { user: any }) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-gray-800 bg-black p-4 text-white md:flex">
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-gray-800 bg-black p-4 text-white md:flex overflow-x-hidden">
         <div>
           <Link href="/" className="mb-8 flex items-center gap-2">
             <svg
@@ -84,12 +85,14 @@ export function CustomSidebar({ user }: { user: any }) {
             href={`/u/${user.username}`}
             className="flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-gray-800"
           >
-            <div className="h-8 w-8 rounded-full bg-gray-600">
+            <div className="h-8 w-8 rounded-full bg-gray-600 shrink-0 flex-shrink-0">
               {user.image ? (
-                <img
+                <Image
+                  width={32}
+                  height={32}
                   src={user.image}
                   alt={user.name}
-                  className="h-full w-full rounded-full object-cover"
+                  className="h-full w-full rounded-full aspect-square object-cover shrink-0 flex-shrink-0"
                 />
               ) : (
                 <span className="flex h-full w-full items-center justify-center text-white">
@@ -99,7 +102,9 @@ export function CustomSidebar({ user }: { user: any }) {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium">{user.name}</span>
-              <span className="text-xs text-gray-400">@{user.username}</span>
+              <span className="text-xs text-gray-400 truncate max-w-[180px]">
+                @{user.username}
+              </span>
             </div>
           </Link>
         </div>
