@@ -81,7 +81,7 @@ export function CustomSidebar({ user }: { user: any }) {
         </div>
         <div className="mt-auto">
           <Link
-            href={`/${user.username}`}
+            href={`/u/${user.username}`}
             className="flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-gray-800"
           >
             <div className="h-8 w-8 rounded-full bg-gray-600">
@@ -122,7 +122,7 @@ export function CustomSidebar({ user }: { user: any }) {
           <PlusCircle className="h-6 w-6" />
         </button>
         <Link
-          href={`/${user.username}`}
+          href={`/u/${user.username}`}
           className="overflow-hidden rounded-full"
         >
           <div className="h-6 w-6 rounded-full bg-gray-600">
