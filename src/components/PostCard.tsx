@@ -125,7 +125,7 @@ export function PostCard({ post, currentUser }: any) {
     <Card className="border-[#2c2c2c] bg-[#1c1c1c]">
       <CardHeader className="flex flex-row items-center p-4">
         <Link
-          href={`/${post.createdBy.username}`}
+          href={`/u/${post.createdBy.username}`}
           className="flex items-center gap-2"
         >
           <Avatar className="h-8 w-8 border border-[#2c2c2c]">
