@@ -6,6 +6,7 @@ import { auth } from "@/server/auth";
 import RootLayoutClient from "@/components/RootLayoutClient";
 import Providers from "@/components/Provider";
 import { Toaster } from "@/components/ui/toaster";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "TravelShare",
@@ -40,6 +41,11 @@ export default async function RootLayout({
           <RootLayoutClient user={user}>{children}</RootLayoutClient>
           <Toaster />
         </body>
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="6ba18372-7f62-4c57-b397-640ea22b31c9"
+        />
       </Providers>
     </html>
   );
