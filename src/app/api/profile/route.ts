@@ -68,16 +68,18 @@ export async function PATCH(request: Request) {
       );
     }
 
-    // Check if new username is already taken
-    const existingUser = await db.user.findUnique({
-      where: { username: newUsername },
-    });
+    if (newUsername !== currentUser.username) {
+      // Check if new username is already taken
+      const existingUser = await db.user.findUnique({
+        where: { username: newUsername },
+      });
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Username already taken" },
-        { status: 400 },
-      );
+      if (existingUser) {
+        return NextResponse.json(
+          { error: "Username already taken" },
+          { status: 400 },
+        );
+      }
     }
   }
 
