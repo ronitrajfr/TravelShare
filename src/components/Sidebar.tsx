@@ -118,9 +118,9 @@ export function CustomSidebar({ user }: { user: any }) {
             <item.icon className="h-6 w-6" />
           </Link>
         ))}
-        <button className="text-2xl text-gray-400">
+        <Link href={"/new-post"} className="text-2xl text-gray-400">
           <PlusCircle className="h-6 w-6" />
-        </button>
+        </Link>
         <Link
           href={`/u/${user.username}`}
           className="overflow-hidden rounded-full"
