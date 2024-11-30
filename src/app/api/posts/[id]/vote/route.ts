@@ -15,7 +15,7 @@ export async function POST(req: Request, { params }: any) {
     await db.vote.deleteMany({
       where: {
         postId,
-        userId: session.user.username,
+        userId: session.user.id,
       },
     });
 
@@ -24,7 +24,7 @@ export async function POST(req: Request, { params }: any) {
       data: {
         type,
         postId,
-        userId: session.user.username,
+        userId: session.user.id,
       },
     });
 
